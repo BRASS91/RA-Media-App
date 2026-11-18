@@ -9,7 +9,7 @@ import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
-const APP = "https://ransdell91.github.io/RA-Media-App/";
+const APP = "https://brass91.github.io/RA-Media-App/";
 const RA_APP = "otm";
 const CORS = {
   "Access-Control-Allow-Origin": "*",

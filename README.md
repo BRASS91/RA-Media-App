@@ -2,10 +2,11 @@
 
 One installable app for R&A's productions. Sign in once, then pick a production from the home screen.
 
-- **App:** https://ransdell91.github.io/RA-Media-App/
-- **Off The Map:** https://ransdell91.github.io/RA-Media-App/otm/
-- **SailorBloodMo0n:** https://ransdell91.github.io/RA-Media-App/sbm/
-- **Farm R&A:** https://ransdell91.github.io/RA-Media-App/farm/ (Humboldt Farms' farm journal and FSA Groundwork Plan)
+- **App:** https://brass91.github.io/RA-Media-App/
+- **Off The Map:** https://brass91.github.io/RA-Media-App/otm/
+- **SailorBloodMo0n:** https://brass91.github.io/RA-Media-App/sbm/
+- **Farm R&A:** https://brass91.github.io/RA-Media-App/farm/ (Humboldt Farms' farm journal and FSA Groundwork Plan)
+- **Code:** https://github.com/BRASS91/RA-Media-App (GitHub user `BRASS91`, formerly `ransdell91`). GitHub Pages serves it at brass91.github.io; the old ransdell91.github.io address stopped working with the rename and doesn't redirect.
 - **Data:** Supabase project `fbskjgluladhqocklyre` in the R&A Media Productions LLC organization. Every app's records are in `public.records`, tagged by `app` (`otm`, `sbm`, `farm`). Farm receipt photos are in the private storage bucket `farm-receipts`.
 - **Sign-in and access:** email and password, or an emailed code. Only addresses in `public.accounts` get in. Someone on the list with no password yet can choose one on the sign-in screen ("First time? Create your password", edge function `ra-first-password`).
 
@@ -31,6 +32,12 @@ Admins add, change and remove accounts in **Settings → Accounts & access**. Th
 1. Put it in its own folder, using `records` with its own `app` id (copy how `otm/` reads and writes).
 2. Add it to `APPS` in `index.html`, and its files to `SHELL` in `sw.js`.
 3. Give people access in Settings → Accounts & access.
+
+## Retired repos
+These only redirect into this app now:
+- [BRASS91/Off-the-Map-App](https://github.com/BRASS91/Off-the-Map-App) → `otm/`
+- [BRASS91/Sailorbloodmo0n-Production-App](https://github.com/BRASS91/Sailorbloodmo0n-Production-App) → `sbm/`
+- [BRASS91/Farm-Journal](https://github.com/BRASS91/Farm-Journal) → `farm/`
 
 ## Updating
 Edit and push to `main`. GitHub Pages republishes in about a minute. Bump `VERSION` in `sw.js` when cached files change; phones pick up the new version the next time the app opens with a connection.
