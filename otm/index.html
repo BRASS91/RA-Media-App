@@ -1211,7 +1211,7 @@ function viewSettings(inSheet){
   /* display (this phone) */
   var startOpts=[['today','Today'],['runway','Runway'],['episodes','Episodes'],['ideas','Ideas'],['trips','Trips']];
   var quick='<div class="group">'+segRow('Appearance','','theme',devGet('theme','system'),[['system','Auto'],['light','Light'],['dark','Dark']])+
-    (window.RALinks?segRow('Open links','','links',RALinks.get(),RALinks.options).replace(/<\/div><\/div>$/,'</div><span class="small" style="flex-basis:100%">'+RALinks.help+'</span></div>'):'')+'</div>';
+    '</div>'+(window.RALinks?'<p class="label setg">Open links</p><div class="group">'+RALinks.rows().map(function(x){return segRow(x.label,'','links',x.cur,x.opts);}).join('')+'<div class="item"><span class="small">'+RALinks.help+'</span></div></div>':'');
   var disp=segRow('Show tasks for','Filters Today and the calendar.','who',getWho(),[['all','Everyone']].concat(team().map(function(t){return [t.id,t.name];})))+
     '<div class="item"><span class="grow"><span style="font-weight:500">Open to</span><span class="small">The first screen when you launch the app.</span></span><select class="set-in" data-dev="start" aria-label="Open to">'+startOpts.map(function(o){return '<option value="'+o[0]+'"'+(devGet('start','today')===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></div>'+
     swRow(devGet('motion','on')!=='off','motion','','Slide animations','Page slides when you swipe between days and months.');
@@ -1593,7 +1593,7 @@ window.addEventListener('hashchange',function(ev){var was=parseRoute('#'+((ev&&e
   S.ui.epTab='overview';hideTip();render();var m=document.getElementById('main');if(m)m.scrollTop=0;});
 var lastWide=null;window.addEventListener('resize',function(){var w=wide();if(w!==lastWide){lastWide=w;render();}});
 lastWide=wide();
-var APP_VERSION='RA-1.11 · OTM 1.29';
+var APP_VERSION='RA-1.12 · OTM 1.30';
 S.ui.who=getWho();
 applyTheme();
 startScreen();
