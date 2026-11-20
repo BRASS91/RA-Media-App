@@ -69,7 +69,13 @@ a{color:var(--link)}
 .tb-title{font-family:var(--f-display);font-weight:700;font-size:28px;line-height:1.08;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tb-act{display:flex;align-items:center;gap:0;flex:none}
 .tb-act .iconbtn[aria-pressed="true"]{background:var(--sand);color:var(--accent-fg)}
-.tb-avatar{width:44px;height:44px;border:0;background:transparent;padding:0;margin-left:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.tb-avatar{position:relative;width:44px;height:44px;border:0;background:transparent;padding:0;margin-left:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.tb-avatar .badge{top:0;right:0}
+.tb-logo{width:56px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:12px;text-decoration:none}
+.tb-logo i{display:block;width:46px;height:27px;background:url(../icons/logo-on-light.svg) center/contain no-repeat}
+.tb-logo:hover{background:rgba(127,127,127,.12)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tb-logo i{background-image:url(../icons/logo-on-dark.svg)}}
+:root[data-theme="dark"] .tb-logo i{background-image:url(../icons/logo-on-dark.svg)}
 .avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;transition:box-shadow .15s}
 .tb-avatar[aria-pressed="true"] .avatar{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
 .nav{position:fixed;z-index:15;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding:6px;box-sizing:border-box;background:color-mix(in srgb,var(--surface2) 86%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--line);border-radius:28px;box-shadow:0 10px 30px -8px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.08)}
@@ -993,7 +999,7 @@ function topbarHtml(r,setOpen){
   var onSet=!!setOpen||r.v==='settings';
   return '<div class="tb-in">'+(back?'<a class="iconbtn tb-back" href="'+back[0]+'" aria-label="Back to '+back[1]+'" data-tip="Back to '+back[1]+'">'+svg('M15 5l-7 7 7 7','')+'</a>':'')+
     '<div class="tb-titles"><div class="eyebrow">'+esc(eb)+'</div><h1 class="tb-title">'+esc(t)+'</h1></div>'+
-    '<div class="tb-act"><a class="iconbtn" href="'+RA_HOME+'" aria-label="R&amp;A home" data-tip="Back to the R&amp;A home screen"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 11l8-7 8 7M6 9.5V20h12V9.5M10 20v-5h4v5\"/></svg></a>'+driveBtn()+claudeBtn()+bellBtn()+'<button class="tb-avatar" type="button" data-act="settings" aria-pressed="'+onSet+'" aria-label="Account and settings" data-tip="'+(onSet?'Close settings':esc(meName())+' · account, notifications, reminders and display')+'"><span class="avatar">'+esc(meName().charAt(0).toUpperCase())+'</span></button></div></div>';
+    '<div class="tb-act"><a class="tb-logo" href="'+RA_HOME+'" aria-label="R&amp;A home" data-tip="Back to the R&amp;A hub"><i aria-hidden="true"></i></a>'+'<button class="tb-avatar" type="button" data-act="settings" aria-pressed="'+onSet+'" aria-label="Account and settings" data-tip="'+(onSet?'Close settings':esc(meName())+' · account, notifications, reminders and display')+'"><span class="avatar">'+esc(meName().charAt(0).toUpperCase())+'</span>'+(unread()?'<span class="badge" aria-label="'+unread()+' new prompts">'+unread()+'</span>':'')+'</button></div></div>';
 }
 /* ---------- Claude chats ---------- */
 var DEFAULT_LINKS=[{id:'project',name:'Off The Map CA project',url:'',note:'The project page: every chat and file'},{id:'appdev',name:'OTM App Developer',url:'https://claude.ai/code/session_01SeKF9eavJ12HGTuzXuskiY',note:'Changes, fixes and new features for this app'}];
@@ -1210,6 +1216,11 @@ function viewSettings(inSheet){
   var custom=(S.ui.rem?'':'')+(rl||'<div class="item"><span class="small">No custom reminders yet.</span></div>')+(S.ui.rem?'':'<button class="item" type="button" data-act="remnew" style="color:var(--accent-fg);font-weight:600"><svg class="chev" viewBox="0 0 24 24" style="stroke:currentColor"><path d="M12 5v14M5 12h14"/></svg>Add a reminder</button>');
   /* display (this phone) */
   var startOpts=[['today','Today'],['runway','Runway'],['episodes','Episodes'],['ideas','Ideas'],['trips','Trips']];
+  var nU=unread();
+  var shortcuts='<p class="label setg">Shortcuts</p><div class="group">'+
+    '<a class="item setrow" href="#prompts"><span class="seticon"><svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 21h4"/></svg></span><span class="grow"><span style="font-weight:600">Prompts</span><span class="small">Daily prompts and reminders from Claude</span></span>'+(nU?'<span class="pill" style="background:var(--pin);color:#fff">'+nU+' new</span>':'')+svg('M9 5l7 7-7 7')+'</a>'+
+    (drive().root?'<button class="item setrow" type="button" data-act="files"><span class="seticon">'+FOLDER_SVG+'</span><span class="grow" style="text-align:left"><span style="font-weight:600">Google Drive folders</span><span class="small">Channel, episode and trip folders</span></span>'+svg('M9 5l7 7-7 7')+'</button>':'')+
+    '<button class="item setrow" type="button" data-act="claude"><span class="seticon">'+CHAT_SVG+'</span><span class="grow" style="text-align:left"><span style="font-weight:600">Claude chats</span><span class="small">The project, the app developer and episode chats</span></span>'+svg('M9 5l7 7-7 7')+'</button></div>';
   var quick='<div class="group">'+segRow('Appearance','','theme',devGet('theme','system'),[['system','Auto'],['light','Light'],['dark','Dark']])+
     '</div>'+(window.RALinks?'<p class="label setg">Open links</p><div class="group">'+RALinks.rows().map(function(x){return segRow(x.label,'','links',x.cur,x.opts);}).join('')+'<div class="item"><span class="small">'+RALinks.help+'</span></div></div>':'');
   var disp=segRow('Show tasks for','Filters Today and the calendar.','who',getWho(),[['all','Everyone']].concat(team().map(function(t){return [t.id,t.name];})))+
@@ -1253,7 +1264,7 @@ function viewSettings(inSheet){
   menu+='</div>';
   var detail=curSec?'<div class="setdetail">'+(w?'<h2>'+esc(curSec.t)+'</h2>':'')+(curSec.note?'<p class="sub" style="margin:0">'+curSec.note+'</p>':'')+curSec.body+'</div>':'';
   if(w)return '<div class="wrap">'+statusBanner()+'<div class="setsplit"><nav class="setmenu" aria-label="Settings sections">'+menu+'</nav>'+detail+'</div></div>';
-  if(inSheet)return statusBanner()+(curSec?detail:quick+'<nav class="setmenu" aria-label="Settings sections">'+menu+'</nav>');
+  if(inSheet)return statusBanner()+(curSec?detail:shortcuts+quick+'<nav class="setmenu" aria-label="Settings sections">'+menu+'</nav>');
   return '<div class="wrap">'+statusBanner()+(curSec?detail:quick+'<nav class="setmenu" aria-label="Settings sections">'+menu+'</nav>')+'</div>';
 }
 /* ---------- settings sheet ---------- */
@@ -1593,7 +1604,7 @@ window.addEventListener('hashchange',function(ev){var was=parseRoute('#'+((ev&&e
   S.ui.epTab='overview';hideTip();render();var m=document.getElementById('main');if(m)m.scrollTop=0;});
 var lastWide=null;window.addEventListener('resize',function(){var w=wide();if(w!==lastWide){lastWide=w;render();}});
 lastWide=wide();
-var APP_VERSION='RA-1.12 · OTM 1.30';
+var APP_VERSION='RA-1.13 · OTM 1.31';
 S.ui.who=getWho();
 applyTheme();
 startScreen();

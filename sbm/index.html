@@ -221,6 +221,10 @@ body.gate .nav,body.gate .fab,body.gate .topbar{display:none}
 .tb-act .iconbtn,.tb-back.iconbtn{border:0;background:transparent}
 .tb-act .iconbtn svg,.tb-back svg{width:22px;height:22px;stroke-width:1.8}
 .tb-avatar{width:44px;height:44px;border:0;background:transparent;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%}
+.tb-logo{width:56px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:12px;text-decoration:none}
+.tb-logo i{display:block;width:46px;height:27px;background:url(../icons/logo-on-light.svg) center/contain no-repeat}
+.tb-logo:hover{background:rgba(127,127,127,.12)}
+:root[data-theme="dark"] .tb-logo i{background-image:url(../icons/logo-on-dark.svg)}
 @media (min-width:600px){.tb-in{height:88px;padding:14px max(24px,env(safe-area-inset-right,0px)) 8px 32px}.tb-title{font-size:34px}}
 .homelink{display:inline-flex;align-items:center;gap:2px;flex-direction:row-reverse;text-decoration:none;color:var(--muted);min-height:44px}
 .homelink .homeback{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
@@ -596,7 +600,7 @@ function topbarHtml(r){
   var em=(S.session&&S.session.user&&S.session.user.email)||'';
   return '<div class="tb-in">'+(back?'<a class="iconbtn tb-back" href="'+back[0]+'" aria-label="Back to '+back[1]+'">'+svg(BACK)+'</a>':'')+
     '<div class="tb-titles"><div class="eyebrow">'+esc(eb)+'</div><h1 class="tb-title">'+esc(t)+'</h1></div>'+
-    '<div class="tb-act"><a class="iconbtn" href="'+RA_HOME+'" aria-label="R&amp;A home" title="Back to the R&amp;A home screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7M6 9.5V20h12V9.5M10 20v-5h4v5"/></svg></a>'+
+    '<div class="tb-act"><a class="tb-logo" href="'+RA_HOME+'" aria-label="R&amp;A home" title="Back to the R&amp;A hub"><i aria-hidden="true"></i></a>'+
     '<button class="tb-avatar" type="button" data-act="account" aria-label="Account and settings" title="'+esc(em?em+' · account and settings':'Account and settings')+'"><span class="avatar">'+esc(initial())+'</span></button></div></div>';
 }
 function banner(){var ro=S.readOnly?'<div class="notice">View only. You can look around, but changes won’t save.</div>':'';return ro+banner0();}
