@@ -5,7 +5,7 @@
 const VERSION = 'ra-1.14';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './vendor/supabase-2.45.4.js', './links.js',
-  './icons/icon-192-v2.png', './icons/icon-512-v2.png', './icons/icon-maskable-512-v2.png', './icons/favicon-32.png', './icons/apple-touch-icon.png', './icons/logo-on-dark.svg', './icons/logo-on-light.svg', './icons/icon.svg',
+  './icons/icon-192-v2.png', './icons/icon-512-v2.png', './icons/icon-maskable-512-v2.png', './icons/favicon-32.png', './icons/apple-touch-icon.png', './icons/logo-on-dark.svg', './icons/logo-on-light.svg', './icons/ra-mark.svg', './icons/icon.svg',
   './otm/', './otm/index.html', './otm/icons/icon-192.png', './otm/icons/favicon-32.png', './otm/icons/apple-touch-icon.png', './otm/icons/badge-96-v2.png',
   './sbm/', './sbm/index.html', './sbm/icons/icon-192.png', './sbm/icons/favicon-32.png', './sbm/icons/apple-touch-icon.png', './sbm/icons/badge-96-v2.png', './sbm/icons/icon.svg',
   './farm/', './farm/index.html', './farm/icons/icon-192.png'
