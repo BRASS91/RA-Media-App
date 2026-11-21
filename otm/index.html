@@ -71,8 +71,8 @@ a{color:var(--link)}
 .tb-act .iconbtn[aria-pressed="true"]{background:var(--sand);color:var(--accent-fg)}
 .tb-avatar{position:relative;width:44px;height:44px;border:0;background:transparent;padding:0;margin-left:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%}
 .tb-avatar .badge{top:0;right:0}
-.tb-logo{width:68px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:12px;text-decoration:none;color:var(--ink)}
-.tb-logo i{display:block;width:58px;height:34px;background:currentColor;-webkit-mask:url(../icons/ra-mark.svg) center/contain no-repeat;mask:url(../icons/ra-mark.svg) center/contain no-repeat}
+.tb-logo{width:52px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:12px;text-decoration:none;color:var(--ink)}
+.tb-logo i{display:block;width:41px;height:24px;background:currentColor;-webkit-mask:url(../icons/ra-mark.svg) center/contain no-repeat;mask:url(../icons/ra-mark.svg) center/contain no-repeat}
 .tb-logo:hover{background:rgba(127,127,127,.12)}
 .avatar{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;transition:box-shadow .15s}
 .tb-avatar[aria-pressed="true"] .avatar{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent)}
@@ -997,7 +997,7 @@ function topbarHtml(r,setOpen){
   var onSet=!!setOpen||r.v==='settings';
   return '<div class="tb-in">'+(back?'<a class="iconbtn tb-back" href="'+back[0]+'" aria-label="Back to '+back[1]+'" data-tip="Back to '+back[1]+'">'+svg('M15 5l-7 7 7 7','')+'</a>':'')+
     '<div class="tb-titles"><div class="eyebrow">'+esc(eb)+'</div><h1 class="tb-title">'+esc(t)+'</h1></div>'+
-    '<div class="tb-act"><a class="tb-logo" href="'+RA_HOME+'" aria-label="R&amp;A home" data-tip="Back to the R&amp;A hub"><i aria-hidden="true"></i></a>'+'<button class="tb-avatar" type="button" data-act="settings" aria-pressed="'+onSet+'" aria-label="Account and settings" data-tip="'+(onSet?'Close settings':esc(meName())+' · account, notifications, reminders and display')+'"><span class="avatar">'+esc(meName().charAt(0).toUpperCase())+'</span>'+(unread()?'<span class="badge" aria-label="'+unread()+' new prompts">'+unread()+'</span>':'')+'</button></div></div>';
+    '<div class="tb-act">'+'<button class="tb-avatar" type="button" data-act="settings" aria-pressed="'+onSet+'" aria-label="Account and settings" data-tip="'+(onSet?'Close settings':esc(meName())+' · account, notifications, reminders and display')+'"><span class="avatar">'+esc(meName().charAt(0).toUpperCase())+'</span>'+(unread()?'<span class="badge" aria-label="'+unread()+' new prompts">'+unread()+'</span>':'')+'</button></div></div>';
 }
 /* ---------- Claude chats ---------- */
 var DEFAULT_LINKS=[{id:'project',name:'Off The Map CA project',url:'',note:'The project page: every chat and file'},{id:'appdev',name:'OTM App Developer',url:'https://claude.ai/code/session_01SeKF9eavJ12HGTuzXuskiY',note:'Changes, fixes and new features for this app'}];
@@ -1281,7 +1281,7 @@ function renderSetLayer(show){
   var sh=cur.querySelector('.setsheet'); sh.classList.toggle('full',!!S.ui.setFull);
   var full=!!S.ui.setFull, hd=cur.querySelector('.sethead');
   hd.className='sethead'+(sec?' sub':'');
-  hd.innerHTML=(sec?'<a class="iconbtn" href="#settings" aria-label="Back to Settings">'+svg('M15 5l-7 7 7 7','')+'</a>':'')+'<h2 id="set-t">'+esc(S.ui.setTitle||'Settings')+'</h2>'+
+  hd.innerHTML=(sec?'<a class="iconbtn" href="#settings" aria-label="Back to Settings">'+svg('M15 5l-7 7 7 7','')+'</a>':'')+'<h2 id="set-t">'+esc(S.ui.setTitle||'Settings')+'</h2>'+'<a class="tb-logo" href="'+RA_HOME+'" aria-label="R&amp;A home" data-tip="Back to the R&amp;A hub"><i aria-hidden="true"></i></a>'+
     '<button class="iconbtn" type="button" data-act="setfull" aria-label="'+(full?'Shrink settings':'Full screen')+'">'+svg(full?'M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5':'M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5','')+'</button>'+
     '<button class="iconbtn" type="button" data-act="setclose" aria-label="Close settings">'+svg('M6 6l12 12M18 6L6 18','')+'</button>';
   var bd=cur.querySelector('.setbody'), keep=(!fresh&&setSec===sec)?bd.scrollTop:0;
@@ -1602,7 +1602,7 @@ window.addEventListener('hashchange',function(ev){var was=parseRoute('#'+((ev&&e
   S.ui.epTab='overview';hideTip();render();var m=document.getElementById('main');if(m)m.scrollTop=0;});
 var lastWide=null;window.addEventListener('resize',function(){var w=wide();if(w!==lastWide){lastWide=w;render();}});
 lastWide=wide();
-var APP_VERSION='RA-1.14 · OTM 1.32';
+var APP_VERSION='RA-1.15 · OTM 1.33';
 S.ui.who=getWho();
 applyTheme();
 startScreen();
