@@ -2,12 +2,12 @@
 // The app shell is cached so each app opens without a connection.
 // Data is never cached here; each app keeps its own copy of what it last loaded.
 // Other apps on brass91.github.io (Farm R&A) share cache storage, so only ra-* caches are ever cleared.
-const VERSION = 'ra-1.13';
+const VERSION = 'ra-1.14';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './vendor/supabase-2.45.4.js', './links.js',
-  './icons/icon-192-v2.png', './icons/icon-512-v2.png', './icons/icon-maskable-512-v2.png', './icons/favicon-32.png', './icons/apple-touch-icon.png', './icons/badge-96.png', './icons/logo-on-dark.svg', './icons/logo-on-light.svg', './icons/icon.svg',
-  './otm/', './otm/index.html', './otm/icons/icon-192.png', './otm/icons/favicon-32.png', './otm/icons/apple-touch-icon.png',
-  './sbm/', './sbm/index.html', './sbm/icons/icon-192.png', './sbm/icons/favicon-32.png', './sbm/icons/apple-touch-icon.png', './sbm/icons/icon.svg',
+  './icons/icon-192-v2.png', './icons/icon-512-v2.png', './icons/icon-maskable-512-v2.png', './icons/favicon-32.png', './icons/apple-touch-icon.png', './icons/logo-on-dark.svg', './icons/logo-on-light.svg', './icons/ra-mark.svg', './icons/icon.svg',
+  './otm/', './otm/index.html', './otm/icons/icon-192.png', './otm/icons/favicon-32.png', './otm/icons/apple-touch-icon.png', './otm/icons/badge-96-v2.png',
+  './sbm/', './sbm/index.html', './sbm/icons/icon-192.png', './sbm/icons/favicon-32.png', './sbm/icons/apple-touch-icon.png', './sbm/icons/badge-96-v2.png', './sbm/icons/icon.svg',
   './farm/', './farm/index.html', './farm/icons/icon-192.png'
 ];
 
@@ -64,10 +64,14 @@ self.addEventListener('push', (event) => {
   let d = {};
   try { d = event.data ? event.data.json() : {}; } catch (e) { d = { title: 'R&A', body: event.data ? event.data.text() : '' }; }
   const title = d.title || 'R&A';
+  // Each app's notifications carry that app's own icon and status-bar badge.
+  // The app comes from the payload's "app", or from the page it opens (./otm/..., ./sbm/...).
+  let app = d.app || (((d.url || '').match(/^\.\/(otm|sbm)\//) || [])[1]) || 'otm';
+  if (app !== 'otm' && app !== 'sbm') app = 'otm';
   event.waitUntil(self.registration.showNotification(title, {
     body: d.body || '',
-    icon: d.icon || './otm/icons/icon-192.png',
-    badge: './icons/badge-96.png',
+    icon: d.icon || './' + app + '/icons/icon-192.png',
+    badge: d.badge || './' + app + '/icons/badge-96-v2.png',
     tag: d.tag || undefined,
     renotify: !!d.tag,
     data: { url: d.url || './' }
