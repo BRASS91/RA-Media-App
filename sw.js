@@ -1,14 +1,13 @@
 // R&A Media Productions: offline support for the R&A home and every app inside it.
 // The app shell is cached so each app opens without a connection.
 // Data is never cached here; each app keeps its own copy of what it last loaded.
-// Other apps on brass91.github.io (Farm R&A) share cache storage, so only ra-* caches are ever cleared.
-const VERSION = 'ra-1.15';
+// Other apps on brass91.github.io (such as Farm-Journal) share cache storage, so only ra-* caches are ever cleared.
+const VERSION = 'ra-1.16';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './vendor/supabase-2.45.4.js', './links.js',
   './icons/icon-192-v2.png', './icons/icon-512-v2.png', './icons/icon-maskable-512-v2.png', './icons/favicon-32.png', './icons/apple-touch-icon.png', './icons/logo-on-dark.svg', './icons/logo-on-light.svg', './icons/ra-mark.svg', './icons/icon.svg',
   './otm/', './otm/index.html', './otm/icons/icon-192.png', './otm/icons/favicon-32.png', './otm/icons/apple-touch-icon.png', './otm/icons/badge-96-v2.png',
-  './sbm/', './sbm/index.html', './sbm/icons/icon-192.png', './sbm/icons/favicon-32.png', './sbm/icons/apple-touch-icon.png', './sbm/icons/badge-96-v2.png', './sbm/icons/icon.svg',
-  './farm/', './farm/index.html', './farm/icons/icon-192.png'
+  './sbm/', './sbm/index.html', './sbm/icons/icon-192.png', './sbm/icons/favicon-32.png', './sbm/icons/apple-touch-icon.png', './sbm/icons/badge-96-v2.png', './sbm/icons/icon.svg'
 ];
 
 self.addEventListener('install', (event) => {

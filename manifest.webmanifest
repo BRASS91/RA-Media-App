@@ -1,7 +1,7 @@
 {
   "name": "R&A Media Productions",
   "short_name": "R&A",
-  "description": "R&A Media Productions: Off The Map, SailorBloodMo0n, Farm R&A and client productions in one app.",
+  "description": "R&A Media Productions: Off The Map, SailorBloodMo0n and client productions in one app.",
   "id": "./",
   "start_url": "./",
   "scope": "./",
@@ -46,16 +46,6 @@
       "icons": [
         {
           "src": "sbm/icons/icon-192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
-      "name": "Farm R&A",
-      "url": "./farm/#today",
-      "icons": [
-        {
-          "src": "farm/icons/icon-192.png",
           "sizes": "192x192"
         }
       ]
