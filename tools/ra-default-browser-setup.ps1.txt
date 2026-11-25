@@ -1,0 +1,24 @@
+# Readable copy of what ra-default-browser-setup.cmd runs (it is the same script, base64-encoded for cmd).
+$ErrorActionPreference = 'Stop'
+$dir = Join-Path $env:LOCALAPPDATA 'RA-Media'
+New-Item -ItemType Directory -Force -Path $dir | Out-Null
+$ps1 = Join-Path $dir 'open-link.ps1'
+Set-Content -Path $ps1 -Encoding UTF8 -Value @'
+param([string]$Link)
+# R&A apps: open a link in the Windows default browser. Only http and https web addresses are ever opened.
+$u = $Link -replace '^ra-open:', ''
+try { $u = [System.Uri]::UnescapeDataString($u) } catch { exit 1 }
+if ($u -notmatch '^https?://[^\s"''<>`]+$') { exit 1 }
+Start-Process -FilePath $u
+
+'@
+$key = 'HKCU:\Software\Classes\ra-open'
+New-Item -Path $key -Force | Out-Null
+Set-ItemProperty -Path $key -Name '(default)' -Value 'URL:R&A open in default browser'
+New-ItemProperty -Path $key -Name 'URL Protocol' -Value '' -PropertyType String -Force | Out-Null
+New-Item -Path "$key\shell\open\command" -Force | Out-Null
+$cmd = 'powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "' + $ps1 + '" "%1"'
+Set-ItemProperty -Path "$key\shell\open\command" -Name '(default)' -Value $cmd
+Write-Host ''
+Write-Host 'Done. In the R&A app, pick Default under Settings > Open links.'
+Write-Host 'The first time, Chrome asks to open the link with Windows: tick Always allow, then Open.'

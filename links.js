@@ -7,6 +7,8 @@
    window : a window of its own (computers; on a phone this is the same as a tab)
    app    : the Claude app (claude:// on a computer, an Android intent on a phone), or the Drive,
             Docs, Sheets or Slides app on Android. If the app isn't installed, the link opens in a tab.
+   default: (Windows) the computer's default browser, via the ra-open: link type that
+            tools/ra-default-browser-setup.cmd registers once per computer
    ask    : an "Open with" list every time, with the choices above plus "Another app…" (the phone's
             or computer's share menu), and a box to remember the choice for that kind of link. */
 (function () {
@@ -16,6 +18,8 @@
   var ANDROID = /Android/i.test(UA);
   var IOS = /iPhone|iPad|iPod/i.test(UA) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(UA));
   var MOBILE = ANDROID || IOS;
+  var WINDOWS = !MOBILE && /Windows/i.test(UA);
+  var SETUP = new URL('tools/ra-default-browser-setup.cmd', document.currentScript ? document.currentScript.src : location.href).href;
   var KINDS = {
     claude: { label: 'Claude links', app: 'Claude app' },
     drive: { label: 'Drive links', app: MOBILE ? 'Drive app' : null },
@@ -40,6 +44,7 @@
     if (v === 'tab' || v === 'ask') return true;
     if (v === 'window') return true; /* stored as-is; acts as a tab on phones */
     if (v === 'app') return !!KINDS[k].app;
+    if (v === 'default') return WINDOWS; /* Windows' default browser, through the ra-open: helper */
     return false;
   }
   function save(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} }
@@ -60,6 +65,7 @@
   function options(k) {
     var o = [[k + ':tab', 'Tab']];
     if (!MOBILE) o.push([k + ':window', 'Window']);
+    if (WINDOWS) o.push([k + ':default', 'Default']);
     if (KINDS[k].app) o.push([k + ':app', 'App']);
     o.push([k + ':ask', 'Ask']);
     return o;
@@ -100,6 +106,8 @@
     if (k === 'drive' && ANDROID) { var pkg = drivePkg(u); if (pkg) { location.href = androidIntent(u, pkg); return; } }
     openTab(u.href);
   }
+  /* Hands the link to Windows, which opens it in the default browser (set up once with tools/ra-default-browser-setup.cmd). */
+  function openDefault(u) { location.href = 'ra-open:' + encodeURIComponent(u.href); }
   function shareTo(u) {
     if (navigator.share) { navigator.share({ url: u.href }).catch(function () {}); return; }
     openTab(u.href);
@@ -108,6 +116,7 @@
     if (how === 'app') return openApp(k, u);
     if (how === 'window') return openWindow(u.href);
     if (how === 'share') return shareTo(u);
+    if (how === 'default') return WINDOWS ? openDefault(u) : openTab(u.href);
     return openTab(u.href);
   }
 
@@ -129,7 +138,8 @@
     app: 'M5 4h14v16H5zM9 18h6',
     tab: 'M3 6h18v13H3zM3 10h18M7 6v4',
     window: 'M4 5h16v14H4zM4 9h16M14 13h4v4',
-    share: 'M12 15V3M8 7l4-4 4 4M5 12v8h14v-8'
+    share: 'M12 15V3M8 7l4-4 4 4M5 12v8h14v-8',
+    'default': 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9s1.3-6.4 3.8-9'
   };
   function ask(k, u) {
     if (!document.getElementById('ralk-css')) { var st = document.createElement('style'); st.id = 'ralk-css'; st.textContent = CSS; document.head.appendChild(st); }
@@ -138,7 +148,8 @@
     if (an) list.push(['app', 'Open in the ' + an]);
     list.push(['tab', 'New tab']);
     if (!MOBILE) list.push(['window', 'New window']);
-    if (navigator.share) list.push(['share', 'Another app…']);
+    if (WINDOWS) list.push(['default', 'Default browser']);
+    if (MOBILE && navigator.share) list.push(['share', 'Another app…']);
     var scrim = document.createElement('div'); scrim.className = 'ralk-scrim';
     scrim.innerHTML = '<div class="ralk" role="dialog" aria-modal="true" aria-labelledby="ralk-t"><div class="g"></div><h3 id="ralk-t">Open with</h3><p class="u"></p>' +
       list.map(function (o) { return '<button type="button" class="o" data-how="' + o[0] + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + ICON[o[0]] + '"/></svg>' + o[1] + '</button>'; }).join('') +
@@ -173,7 +184,10 @@
   window.RALinks = {
     get: get, set: set, mobile: MOBILE, open: function (url) { var u = new URL(url, location.href), k = kindOf(u), how = get(k); if (how === 'ask') ask(k, u); else go(how, k, u); },
     rows: function () { return Object.keys(KINDS).map(function (k) { return { k: k, label: KINDS[k].label, cur: k + ':' + get(k), opts: options(k) }; }); },
-    help: (MOBILE ? 'Tab: a browser tab. App: the Claude or Drive app (a tab if it isn’t installed). ' : 'Tab: a browser tab. Window: a window of its own. App: the Claude desktop app. ') +
-      'Ask: choose each time, including any other app. Only changes this device.'
+    windows: WINDOWS, setupUrl: SETUP,
+    help: MOBILE ? 'Tab: a browser tab. App: the Claude or Drive app (a tab if it isn’t installed). Ask: choose each time, including any other app. Only changes this device.'
+      : 'Tab: a browser tab. Window: a window of its own. App: the Claude desktop app.' +
+        (WINDOWS ? ' Default: your Windows default browser. It needs a one-time setup on this computer: <a href="' + SETUP + '" download>download the setup file</a> and double-click it.' : '') +
+        ' Ask: choose each time. Only changes this computer.'
   };
 })();
