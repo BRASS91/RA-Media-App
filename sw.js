@@ -2,7 +2,7 @@
 // The app shell is cached so each app opens without a connection.
 // Data is never cached here; each app keeps its own copy of what it last loaded.
 // Other apps on brass91.github.io (such as Farm-Journal) share cache storage, so only ra-* caches are ever cleared.
-const VERSION = 'ra-1.17';
+const VERSION = 'ra-1.18';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './vendor/supabase-2.45.4.js', './links.js',
   './icons/icon-192-v2.png', './icons/icon-512-v2.png', './icons/icon-maskable-512-v2.png', './icons/favicon-32.png', './icons/apple-touch-icon.png', './icons/logo-on-dark.svg', './icons/logo-on-light.svg', './icons/ra-mark.svg', './icons/icon.svg',

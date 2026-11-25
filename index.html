@@ -88,22 +88,27 @@ button.item,a.item{cursor:pointer}
 
 /* home */
 .hello{display:flex;flex-direction:column;gap:8px}
-.tiles{display:grid;grid-template-columns:1fr;gap:14px}
-@media (min-width:600px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
-.tile{position:relative;display:flex;flex-direction:column;gap:14px;padding:20px;border-radius:22px;text-decoration:none;color:var(--tile-fg);background:var(--tile-bg);min-height:190px;overflow:hidden;transition:transform .12s ease}
-.tile:active{transform:scale(.985)}
-.tile .tl{display:flex;align-items:center;gap:12px}
-.tile .tl img{width:52px;height:52px;border-radius:14px;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.18)}
-.tile .eb{font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;opacity:.8}
-.tile .nm{font:400 30px/1.05 var(--f-display)}
-.tile p{margin:0;font-size:14px;opacity:.88;max-width:40ch}
-.tile .go{margin-top:auto;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:14px}
-.tile .go svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(136px,calc(50% - 7px)),1fr));gap:14px}
+@media (min-width:600px){.tiles{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}}
+@media (min-width:1000px){.tiles{grid-template-columns:repeat(auto-fill,minmax(168px,1fr))}}
+/* square production buttons: they reflow to fit the window */
+.tile{position:relative;container-type:inline-size;aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:space-between;gap:8px;padding:14px;box-sizing:border-box;border-radius:22px;text-decoration:none;color:var(--tile-fg);background:var(--tile-bg);overflow:hidden;transition:transform .12s ease,box-shadow .15s ease;min-width:0}
+.tile:hover{box-shadow:0 8px 22px -10px rgba(0,0,0,.45)}
+.tile:active{transform:scale(.97)}
+.tile:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.tile img{width:clamp(40px,32%,60px);height:auto;aspect-ratio:1;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.tile .tx{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tile .eb{font:500 clamp(9px,6.2cqw,11px)/1.2 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;opacity:.78;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .nm{font:400 clamp(14px,11cqw,24px)/1.08 var(--f-display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .t-otm{--tile-bg:#24352A;--tile-fg:#EDE3C8}
 .t-sbm{--tile-bg:#FF8CC6;--tile-fg:#3A1029}
 :root[data-theme="dark"] .t-sbm{--tile-bg:#5A1A43;--tile-fg:#FFF0F7}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .t-sbm{--tile-bg:#5A1A43;--tile-fg:#FFF0F7}}
-.tile.soon{background:transparent;border:1.5px dashed var(--line-strong);color:var(--muted);min-height:120px;justify-content:center}
+.tile.soon{background:transparent;border:1.5px dashed var(--line-strong);color:var(--muted);align-items:flex-start;cursor:default}
+.tile.soon:hover{box-shadow:none}
+.tile.soon .plus{width:40px;height:40px;border-radius:12px;border:1.5px dashed var(--line-strong);display:flex;align-items:center;justify-content:center}
+.tile.soon .plus svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.tile.soon .nm{color:var(--ink)}
 .pwcard{background:var(--accent-soft);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px}
 
 /* sign-in */
@@ -329,9 +334,9 @@ function topbar(title,eb,back){
 }
 function viewHome(){
   var apps=myApps(), role=S.me.role;
-  var tiles=apps.map(function(a){return '<a class="tile t-'+a.id+'" href="'+a.href+'"><span class="tl"><img src="'+a.icon+'" alt=""><span><span class="eb">'+esc(a.eb)+'</span><br><span class="nm">'+esc(a.name)+'</span></span></span><p>'+esc(a.blurb)+'</p><span class="go">Open'+svg('M5 12h14M13 6l6 6-6 6','')+'</span></a>';}).join('');
+  var tiles=apps.map(function(a){return '<a class="tile t-'+a.id+'" href="'+a.href+'" title="'+esc(a.name+': '+a.blurb)+'" aria-label="Open '+esc(a.name)+'"><img src="'+a.icon+'" alt=""><span class="tx"><span class="eb">'+esc(a.eb)+'</span><span class="nm">'+esc(a.name)+'</span></span></a>';}).join('');
   if(!apps.length)tiles='<div class="empty">No apps are shared with this account yet. An admin can add them in Settings → Accounts &amp; access.</div>';
-  if(role==='admin')tiles+='<div class="tile soon"><span style="font-weight:600;color:var(--ink)">Client spaces</span><span class="small">When you produce for a client, their app shows up here. Give them a Client or Guest account in Settings → Accounts &amp; access.</span></div>';
+  if(role==='admin')tiles+='<div class="tile soon" title="When you produce for a client, their app shows up here. Give them a Client or Guest account in Settings → Accounts &amp; access."><span class="plus">'+svg('M12 5v14M5 12h14','')+'</span><span class="tx"><span class="eb">Coming</span><span class="nm">Client spaces</span></span></div>';
   var pw=needsPassword()?'<div class="pwcard"><h3>Set a password</h3><p class="small" style="margin:0;color:inherit">You signed in with an email code. A password makes next time faster.</p>'+pwForm('Save password')+'<button class="linkbtn" type="button" data-a="pwskip" style="align-self:flex-start;padding-left:0">Not now</button></div>':'';
   return '<div class="wrap">'+topbar('','R&A Media Productions')+
     '<section class="hello"><h1>'+esc(greet())+(firstName()?', '+esc(firstName()):'')+'.</h1><p class="sub">'+(apps.length>1?'Pick a production to work on.':apps.length?'Your production is ready.':'')+' <span class="pill '+role+'">'+TIERS[role].name+'</span></p></section>'+
